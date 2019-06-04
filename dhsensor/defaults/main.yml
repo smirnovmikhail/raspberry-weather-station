@@ -1,0 +1,3 @@
+---
+# defaults file for dhsensor
+zabbix_hostname: 'raspberry-pi'

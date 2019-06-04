@@ -1,0 +1,45 @@
+---
+# tasks file for dhsensor
+- name: 'Install a .deb package from the internet'
+  apt:
+    deb: https://repo.zabbix.com/zabbix/4.0/raspbian/pool/main/z/zabbix-release/zabbix-release_4.0-2+stretch_all.deb
+  become: yes
+  become_user: root
+  register: zabbix_repository
+
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+  become: yes
+  become_user: root
+  when: zabbix_repository.changed
+
+- name: 'Install zabbix-sender'
+  apt:
+    name: zabbix-sender
+    state: latest
+  become: yes
+  become_user: root
+
+- name: 'Generate /root/sens.py'
+  template:
+    src: sens.py.j2
+    dest: /root/sens.py
+    group: root
+    owner: root
+    mode: 0750
+  become: yes
+  become_user: root
+
+# python-pip
+#  pip install Adafruit_DHT
+
+- name: 'Creates a cron file'
+  cron:
+    name: 'Get temp/humidity'
+    user: root
+    job: "/root/sens.py 22 21 > /dev/null"
+    cron_file: /etc/crontab
+  become: yes
+  become_user: root
