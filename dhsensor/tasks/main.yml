@@ -32,8 +32,18 @@
   become: yes
   become_user: root
 
-# python-pip
-#  pip install Adafruit_DHT
+- name: 'Install python-pip'
+  apt:
+    name: python-pip
+    state: present
+  become: yes
+  become_user: root
+
+- name: 'pip install Adafruit_DHT'
+  pip:
+    name: Adafruit_DHT
+  become: yes
+  become_user: root
 
 - name: 'Creates a cron file'
   cron:
