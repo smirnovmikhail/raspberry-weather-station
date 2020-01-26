@@ -1,0 +1,34 @@
+---
+- name: Copy a new sudoers file into place, after passing validation with visudo
+  template:
+    src: etc/sudoers.d/sonic-common.j2
+    dest: /etc/sudoers.d/sonic-common
+    validate: /usr/sbin/visudo -cf %s
+
+#TODO: Refactoring.
+- name: Ensure users groups exists
+  group:
+    name: "{{ item }}"
+    gid: "{{ dbag_groups[item].gid }}"
+    state: present
+  with_items: "{{ sonic_common_mobile_devops_team | map(attribute='groups') | list }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: Add Admin user
+  user:
+    name: "{{ item.user }}"
+    shell: "{{ item.shell }}"
+    uid: "{{ item.uid }}"
+    groups: "{{ item.groups }}"
+  with_items: "{{ sonic_common_mobile_devops_team }}"
+  loop_control:
+    label: "{{ item.user }}"
+
+- name: Add Admin users keys
+  authorized_key:
+    user: "{{ item.user }}"
+    key: "{{ item.key }}"
+  with_items: "{{ sonic_common_mobile_devops_team }}"
+  loop_control:
+    label: "{{ item.user }}"
