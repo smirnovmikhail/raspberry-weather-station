@@ -1,0 +1,9 @@
+---
+# defaults file for base
+
+base_admin_team:
+- user: msmirnov
+  key: "{{ lookup('file', 'msmirnov.pub') }}"
+  shell: /bin/bash
+  uid: 10000
+  groups: ["wheel"]

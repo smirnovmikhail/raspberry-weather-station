@@ -1,0 +1,10 @@
+---
+# tasks file for base
+
+- name: Enable and start ssh service
+  service:
+    name: ssh
+    state: started
+    enabled: yes
+
+- include_tasks: admin_users.yml
