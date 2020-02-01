@@ -6,6 +6,8 @@
   become: yes
   become_user: root
   register: zabbix_repository
+  # fails if package already installed
+  ignore_errors: yes
 
 - name: Update and upgrade apt packages
   apt:

@@ -1,6 +1,12 @@
 ---
 # defaults file for base
 
+base_deb_packages:
+  - vim
+  - screen
+  - mc
+  - python-apt
+
 base_admin_team:
 - user: msmirnov
   key: "{{ lookup('file', 'msmirnov.pub') }}"

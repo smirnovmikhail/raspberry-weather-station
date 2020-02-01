@@ -7,4 +7,14 @@
     state: started
     enabled: yes
 
+- name: install python-apt
+  raw: test -f /usr/lib/python2.7/dist-packages/apt || (apt -y update && apt install -y python-apt)
+
+- name: 'Install packages'
+  package:
+    name: "{{ base_deb_packages }}"
+    state: present
+  become: yes
+  become_user: root
+
 - include_tasks: admin_users.yml
